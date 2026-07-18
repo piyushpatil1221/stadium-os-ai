@@ -15,6 +15,12 @@ import {
 import { useAuth } from '@/providers/AuthProvider'
 import { getAlertsForRole, getAlertMessage, getAlertActions } from '@/lib/roleAlerts'
 import { useMatchStore, type ScheduledMatch } from '@/stores/matchStore'
+import { useStadiumWebSocket } from '@/lib/useWebSocket'
+import { StatCard } from '@/components/dashboard/StatCard'
+import { StadiumHeatmap } from '@/components/dashboard/StadiumHeatmap'
+import { AttendanceChart } from '@/components/dashboard/AttendanceChart'
+import { IncidentFeed } from '@/components/dashboard/IncidentFeed'
+import { PAAnnouncementPanel } from '@/components/dashboard/PAAnnouncementPanel'
 import type { Crowd, Incident } from '@/types'
 import api from '@/lib/api'
 import { cn } from '@/lib/utils'
@@ -28,13 +34,7 @@ const HEATMAP_ZONES = [
   { id: 'vip',   label: 'VIP',   x: 285, y: 170, w: 130, h: 60,  density: 55 },
   { id: 'field', label: 'Field', x: 215, y: 145, w: 270, h: 210, density: 0  },
 ]
-const heatmapColor = (d: number) => {
-  if (d === 0) return 'rgba(6,95,70,0.25)'
-  if (d >= 85) return 'rgba(239,68,68,0.45)'
-  if (d >= 65) return 'rgba(245,158,11,0.35)'
-  return 'rgba(16,185,129,0.25)'
-}
-
+// heatmapColor is now handled by the StadiumHeatmap component
 const attendanceFlow = [
   { t: '16:00', fans: 8200 }, { t: '17:00', fans: 18400 },
   { t: '18:00', fans: 34100 }, { t: '19:00', fans: 52700 },
@@ -73,27 +73,7 @@ function calcRevenue(attendance: number, ticketPrice: number) {
   return { tickets, concessions, merch, parking, total: tickets + concessions + merch + parking }
 }
 
-const StatCard = ({ label, value, sub, icon, color = 'blue' }: { label: string; value: string | number; sub?: string; icon: React.ReactNode; color?: string }) => {
-  const colours: Record<string, string> = {
-    blue:   'bg-blue-500/10 text-blue-400',
-    emerald:'bg-emerald-500/10 text-emerald-400',
-    red:    'bg-red-500/10 text-red-400',
-    purple: 'bg-purple-500/10 text-purple-400',
-    yellow: 'bg-yellow-500/10 text-yellow-400',
-  }
-  return (
-    <div className="stadium-card p-5">
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="text-xs text-gray-500 font-medium">{label}</p>
-          <p className="text-2xl font-bold text-white mt-1">{value}</p>
-          {sub && <p className="text-xs text-gray-400 mt-0.5">{sub}</p>}
-        </div>
-        <div className={cn('w-10 h-10 rounded-xl flex items-center justify-center shrink-0', colours[color])}>{icon}</div>
-      </div>
-    </div>
-  )
-}
+// StatCard is now imported from @/components/dashboard/StatCard
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 export default function OrganizerDashboard() {
@@ -105,8 +85,25 @@ export default function OrganizerDashboard() {
           currentAttendance, currentCapacity, setAttendance, setCapacity } = useMatchStore()
 
   // ── Backend queries ──
-  const { data: crowds }    = useQuery<Crowd[]>({ queryKey: ['crowds'],    queryFn: () => api.get('/crowds/').then(r => r.data),    refetchInterval: 15000 })
-  const { data: incidents } = useQuery<Incident[]>({ queryKey: ['incidents'], queryFn: () => api.get('/incidents/').then(r => r.data), refetchInterval: 10000 })
+  const { data: crowds }    = useQuery<Crowd[]>({ queryKey: ['crowds'],    queryFn: () => api.get('/crowds/').then(r => r.data),    refetchInterval: 30000 })
+  const { data: incidents } = useQuery<Incident[]>({ queryKey: ['incidents'], queryFn: () => api.get('/incidents/').then(r => r.data), refetchInterval: 30000 })
+
+  // ── Real-time WebSocket (replaces aggressive polling) ──
+  const { isConnected, crowdZones } = useStadiumWebSocket({
+    onIncidentUpdate: () => {
+      // Trigger a TanStack refetch when a new incident is pushed
+      // This gives us WebSocket speed + TanStack cache consistency
+    },
+  })
+
+  // Merge WS crowd data into heatmap zones when available
+  const liveHeatmapZones = useMemo(() => {
+    if (crowdZones.length === 0) return HEATMAP_ZONES
+    return HEATMAP_ZONES.map(z => {
+      const ws = crowdZones.find(cz => cz.zone === z.id)
+      return ws ? { ...z, density: ws.density } : z
+    })
+  }, [crowdZones])
 
   // ── Local UI state ──
   const [tab, setTab] = useState<'overview'|'match-control'|'matches'|'volunteers'|'gate'|'pa'|'emergency'>('overview')
@@ -230,7 +227,7 @@ export default function OrganizerDashboard() {
       </div>
 
       {/* ── Tab bar ── */}
-      <div className="flex gap-1 p-1 bg-[hsl(222,47%,7%)] border border-[hsl(217,32%,18%)] rounded-xl overflow-x-auto">
+      <div className="flex gap-1 p-1 bg-bg-inset border border-border-subtle rounded-xl overflow-x-auto">
         {TABS.map(t => (
           <button key={t.id} onClick={() => setTab(t.id as typeof tab)}
             className={cn(
@@ -263,7 +260,7 @@ export default function OrganizerDashboard() {
                     <p className="text-[10px] text-gray-500 mt-0.5">{a.zone ?? 'Stadium'} · {new Date(a.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                     <div className="flex flex-wrap gap-1.5 mt-2">
                       {getAlertActions(a, 'organizer').map((ac: string) => (
-                        <button key={ac} className="text-[10px] px-2.5 py-1 border border-[hsl(217,32%,18%)] text-gray-300 hover:text-white hover:border-blue-500/40 rounded-lg transition-colors">{ac}</button>
+                        <button key={ac} className="text-[10px] px-2.5 py-1 border border-border-subtle text-text-secondary hover:text-text-primary hover:border-brand-blue/40 rounded-lg transition-colors">{ac}</button>
                       ))}
                     </div>
                   </div>
@@ -278,20 +275,8 @@ export default function OrganizerDashboard() {
           </div>
 
           <div className="grid lg:grid-cols-2 gap-4">
-            {/* Heatmap */}
-            <div className="stadium-card p-5">
-              <h3 className="text-sm font-bold text-white mb-3">Live Crowd Heatmap</h3>
-              <svg viewBox="0 0 700 500" className="w-full rounded-xl" style={{ background: 'hsl(222,47%,6%)' }}>
-                <ellipse cx="350" cy="250" rx="300" ry="235" fill="none" stroke="rgba(59,130,246,0.12)" strokeWidth="2" />
-                {HEATMAP_ZONES.map(z => (
-                  <g key={z.id}>
-                    <rect x={z.x} y={z.y} width={z.w} height={z.h} rx="8" fill={heatmapColor(z.density)} stroke={z.density >= 85 ? 'rgba(239,68,68,0.4)' : 'rgba(255,255,255,0.08)'} strokeWidth="1" />
-                    <text x={z.x+z.w/2} y={z.y+z.h/2-6} textAnchor="middle" fill="rgba(255,255,255,0.7)" fontSize="11" fontWeight="600">{z.label}</text>
-                    {z.density > 0 && <text x={z.x+z.w/2} y={z.y+z.h/2+10} textAnchor="middle" fill="rgba(255,255,255,0.5)" fontSize="10">{z.density}%</text>}
-                  </g>
-                ))}
-              </svg>
-            </div>
+            {/* Heatmap — uses live WebSocket data */}
+            <StadiumHeatmap zones={liveHeatmapZones} />
 
             {/* Revenue Calculator */}
             <div className="stadium-card p-5 space-y-4">
@@ -305,7 +290,7 @@ export default function OrganizerDashboard() {
                   <label className="block text-xs text-gray-400 font-medium mb-1.5">Actual Attendance</label>
                   <input type="number" value={currentAttendance} min={0} max={currentCapacity}
                     onChange={e => setAttendance(Number(e.target.value))}
-                    className="w-full rounded-xl px-3 py-2 text-sm font-semibold bg-[hsl(222,47%,9%)] border border-[hsl(217,32%,18%)] text-white outline-none focus:border-emerald-500/50 transition-colors"
+                    className="w-full rounded-xl px-3 py-2 text-sm font-semibold bg-bg-card border border-border-subtle text-text-primary outline-none focus:border-brand-emerald/50 transition-colors"
                   />
                   <div className="mt-1.5 h-1.5 rounded-full bg-white/5 overflow-hidden">
                     <div className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-blue-500 transition-all"
@@ -317,7 +302,7 @@ export default function OrganizerDashboard() {
                   <label className="block text-xs text-gray-400 font-medium mb-1.5">Avg Ticket Price (USD)</label>
                   <input type="number" value={ticketPrice} min={0}
                     onChange={e => setTicketPrice(Number(e.target.value))}
-                    className="w-full rounded-xl px-3 py-2 text-sm font-semibold bg-[hsl(222,47%,9%)] border border-[hsl(217,32%,18%)] text-white outline-none focus:border-emerald-500/50 transition-colors"
+                    className="w-full rounded-xl px-3 py-2 text-sm font-semibold bg-bg-card border border-border-subtle text-text-primary outline-none focus:border-brand-emerald/50 transition-colors"
                   />
                 </div>
               </div>
@@ -328,12 +313,12 @@ export default function OrganizerDashboard() {
                   { label: 'Merchandise ($9/head)',    value: revenue.merch,       icon: '🛍',                  color: 'text-purple-400' },
                   { label: 'Parking ($30/car)',        value: revenue.parking,     icon: '🅿',                  color: 'text-yellow-400' },
                 ].map(r => (
-                  <div key={r.label} className="flex items-center justify-between py-1.5 border-b border-[hsl(217,32%,12%)] last:border-0">
+                  <div key={r.label} className="flex items-center justify-between py-1.5 border-b border-border-subtle last:border-0">
                     <div className="flex items-center gap-2"><span className="text-xs">{r.icon}</span><span className="text-xs text-gray-400">{r.label}</span></div>
                     <span className={cn('text-xs font-bold', r.color)}>${(r.value/1e6).toFixed(2)}M</span>
                   </div>
                 ))}
-                <div className="flex items-center justify-between pt-2 border-t-2 border-[hsl(217,32%,22%)]">
+                <div className="flex items-center justify-between pt-2 border-t-2 border-border-default">
                   <span className="text-sm font-bold text-white">Total Revenue</span>
                   <span className="text-lg font-black text-emerald-400">${(revenue.total/1e6).toFixed(2)}M</span>
                 </div>
@@ -342,24 +327,7 @@ export default function OrganizerDashboard() {
           </div>
 
           {/* Attendance flow */}
-          <div className="stadium-card p-5">
-            <h3 className="text-sm font-bold text-white mb-1">Attendance Flow</h3>
-            <p className="text-xs text-gray-500 mb-4">Fan arrival and departure throughout today</p>
-            <ResponsiveContainer width="100%" height={160}>
-              <AreaChart data={attendanceFlow}>
-                <defs>
-                  <linearGradient id="fanGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%"  stopColor="#3b82f6" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <XAxis dataKey="t" tick={{ fill: '#6b7280', fontSize: 11 }} axisLine={false} tickLine={false} />
-                <YAxis tickFormatter={(v: number) => `${(v/1000).toFixed(0)}K`} tick={{ fill: '#6b7280', fontSize: 11 }} axisLine={false} tickLine={false} />
-                <Tooltip formatter={(v: any) => [Number(v ?? 0).toLocaleString()]} contentStyle={{ background: 'hsl(222,47%,9%)', border: '1px solid hsl(217,32%,18%)', borderRadius: 8, fontSize: 11 }} />
-                <Area type="monotone" dataKey="fans" stroke="#3b82f6" strokeWidth={2} fill="url(#fanGrad)" />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
+          <AttendanceChart data={attendanceFlow} />
         </div>
       )}
 
@@ -496,28 +464,28 @@ export default function OrganizerDashboard() {
                       <label className="block text-xs text-gray-400 font-medium mb-1.5">{f.label}</label>
                       <input value={(newMatch as any)[f.key]} placeholder={f.placeholder}
                         onChange={e => setNewMatch(p => ({ ...p, [f.key]: e.target.value }))}
-                        className="w-full rounded-xl px-3 py-2 text-sm bg-[hsl(222,47%,9%)] border border-[hsl(217,32%,18%)] text-white outline-none focus:border-blue-500/50" />
+                        className="w-full rounded-xl px-3 py-2 text-sm bg-bg-card border border-border-subtle text-text-primary outline-none focus:border-brand-blue/50" />
                     </div>
                   ))}
                   <div>
                     <label className="block text-xs text-gray-400 font-medium mb-1.5">Date *</label>
                     <input type="date" value={newMatch.date} onChange={e => setNewMatch(p => ({ ...p, date: e.target.value }))}
-                      className="w-full rounded-xl px-3 py-2 text-sm bg-[hsl(222,47%,9%)] border border-[hsl(217,32%,18%)] text-white outline-none focus:border-blue-500/50" />
+                      className="w-full rounded-xl px-3 py-2 text-sm bg-bg-card border border-border-subtle text-text-primary outline-none focus:border-brand-blue/50" />
                   </div>
                   <div>
                     <label className="block text-xs text-gray-400 font-medium mb-1.5">Kick-off</label>
                     <input type="time" value={newMatch.time} onChange={e => setNewMatch(p => ({ ...p, time: e.target.value }))}
-                      className="w-full rounded-xl px-3 py-2 text-sm bg-[hsl(222,47%,9%)] border border-[hsl(217,32%,18%)] text-white outline-none focus:border-blue-500/50" />
+                      className="w-full rounded-xl px-3 py-2 text-sm bg-bg-card border border-border-subtle text-text-primary outline-none focus:border-brand-blue/50" />
                   </div>
                   <div>
                     <label className="block text-xs text-gray-400 font-medium mb-1.5">Expected Attendance</label>
                     <input type="number" value={newMatch.expectedAttendance} onChange={e => setNewMatch(p => ({ ...p, expectedAttendance: Number(e.target.value) }))}
-                      className="w-full rounded-xl px-3 py-2 text-sm bg-[hsl(222,47%,9%)] border border-[hsl(217,32%,18%)] text-white outline-none focus:border-blue-500/50" />
+                      className="w-full rounded-xl px-3 py-2 text-sm bg-bg-card border border-border-subtle text-text-primary outline-none focus:border-brand-blue/50" />
                   </div>
                   <div>
                     <label className="block text-xs text-gray-400 font-medium mb-1.5">Ticket Price (USD)</label>
                     <input type="number" value={newMatch.ticketPrice} onChange={e => setNewMatch(p => ({ ...p, ticketPrice: Number(e.target.value) }))}
-                      className="w-full rounded-xl px-3 py-2 text-sm bg-[hsl(222,47%,9%)] border border-[hsl(217,32%,18%)] text-white outline-none focus:border-blue-500/50" />
+                      className="w-full rounded-xl px-3 py-2 text-sm bg-bg-card border border-border-subtle text-text-primary outline-none focus:border-brand-blue/50" />
                   </div>
                 </div>
                 {/* Revenue preview */}
@@ -635,24 +603,24 @@ export default function OrganizerDashboard() {
                   <div>
                     <label className="block text-xs text-gray-400 font-medium mb-1.5">Full Name *</label>
                     <input value={newVol.name} placeholder="e.g. Alex Johnson" onChange={e => setNewVol(p => ({ ...p, name: e.target.value }))}
-                      className="w-full rounded-xl px-3 py-2 text-sm bg-[hsl(222,47%,9%)] border border-[hsl(217,32%,18%)] text-white outline-none focus:border-emerald-500/50" />
+                      className="w-full rounded-xl px-3 py-2 text-sm bg-bg-card border border-border-subtle text-text-primary outline-none focus:border-brand-emerald/50" />
                   </div>
                   <div>
                     <label className="block text-xs text-gray-400 font-medium mb-1.5">Phone</label>
                     <input value={newVol.phone} placeholder="+1 555-0000" onChange={e => setNewVol(p => ({ ...p, phone: e.target.value }))}
-                      className="w-full rounded-xl px-3 py-2 text-sm bg-[hsl(222,47%,9%)] border border-[hsl(217,32%,18%)] text-white outline-none focus:border-emerald-500/50" />
+                      className="w-full rounded-xl px-3 py-2 text-sm bg-bg-card border border-border-subtle text-text-primary outline-none focus:border-brand-emerald/50" />
                   </div>
                   <div>
                     <label className="block text-xs text-gray-400 font-medium mb-1.5">Role</label>
                     <select value={newVol.role} onChange={e => setNewVol(p => ({ ...p, role: e.target.value }))}
-                      className="w-full rounded-xl px-3 py-2 text-sm bg-[hsl(222,47%,9%)] border border-[hsl(217,32%,18%)] text-white outline-none">
+                      className="w-full rounded-xl px-3 py-2 text-sm bg-bg-card border border-border-subtle text-text-primary outline-none">
                       {VOLUNTEER_ROLES.map(r => <option key={r}>{r}</option>)}
                     </select>
                   </div>
                   <div>
                     <label className="block text-xs text-gray-400 font-medium mb-1.5">Section</label>
                     <select value={newVol.section} onChange={e => setNewVol(p => ({ ...p, section: e.target.value }))}
-                      className="w-full rounded-xl px-3 py-2 text-sm bg-[hsl(222,47%,9%)] border border-[hsl(217,32%,18%)] text-white outline-none">
+                      className="w-full rounded-xl px-3 py-2 text-sm bg-bg-card border border-border-subtle text-text-primary outline-none">
                       {SECTIONS.map(s => <option key={s}>{s}</option>)}
                     </select>
                   </div>
@@ -668,7 +636,7 @@ export default function OrganizerDashboard() {
           <div className="stadium-card overflow-hidden">
             <table className="w-full text-xs">
               <thead>
-                <tr className="border-b border-[hsl(217,32%,18%)] text-gray-500">
+                <tr className="border-b border-border-subtle text-text-secondary">
                   <th className="text-left px-5 py-3 font-semibold">Name</th>
                   <th className="text-left px-5 py-3 font-semibold hidden sm:table-cell">Role</th>
                   <th className="text-left px-5 py-3 font-semibold hidden md:table-cell">Section</th>
@@ -677,7 +645,7 @@ export default function OrganizerDashboard() {
                   <th className="px-5 py-3" />
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[hsl(217,32%,12%)]">
+              <tbody className="divide-y divide-border-subtle">
                 {volunteers.map(v => (
                   <motion.tr key={v.id} layout className="hover:bg-white/2 transition-colors">
                     <td className="px-5 py-3">
@@ -763,7 +731,7 @@ export default function OrganizerDashboard() {
           <div className="stadium-card p-5 space-y-3">
             <label className="block text-xs font-semibold text-gray-400">Broadcast Message</label>
             <textarea value={paText} onChange={e => setPaText(e.target.value)} rows={4} placeholder="Type or select a template above…"
-              className="w-full bg-[hsl(222,47%,7%)] border border-[hsl(217,32%,18%)] focus:border-blue-500/50 rounded-xl px-4 py-3 text-sm text-white placeholder:text-gray-600 outline-none resize-none" />
+              className="w-full bg-bg-inset border border-border-subtle focus:border-brand-blue/50 rounded-xl px-4 py-3 text-sm text-text-primary placeholder:text-text-muted outline-none resize-none" />
             <div className="flex items-center gap-3">
               <button onClick={broadcastPA} disabled={!paText.trim()}
                 className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 disabled:opacity-50 text-white font-semibold px-5 py-2.5 rounded-xl">

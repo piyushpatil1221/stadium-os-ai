@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 from app.core.database import get_db
-from app.core.deps import get_current_user
+from app.core.deps import require_role
 from app.models.user import User
 from app.models.crowd import Crowd
 from app.schemas.schemas import CrowdOut
@@ -14,7 +14,7 @@ router = APIRouter(prefix="/crowds", tags=["Crowd Intelligence"])
 @router.get("/", response_model=List[CrowdOut])
 def get_all_crowds(
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_role("staff", "organizer")),
 ):
     """Get live crowd density for all zones."""
     return db.query(Crowd).all()
@@ -24,7 +24,7 @@ def get_all_crowds(
 def get_crowd_by_zone(
     zone: str,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_role("staff", "organizer", "volunteer")),
 ):
     """Get crowd data for a specific zone."""
     crowds = db.query(Crowd).filter(Crowd.zone == zone).all()
@@ -36,7 +36,7 @@ def get_crowd_by_zone(
 @router.get("/summary")
 def get_crowd_summary(
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_role("staff", "organizer", "volunteer")),
 ):
     """Get aggregated crowd summary stats for the dashboard."""
     crowds = db.query(Crowd).all()
@@ -61,7 +61,7 @@ def get_crowd_summary(
 @router.get("/heatmap")
 def get_heatmap(
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_role("staff", "organizer")),
 ):
     """Get heatmap data as a structured grid for visualization."""
     crowds = db.query(Crowd).all()

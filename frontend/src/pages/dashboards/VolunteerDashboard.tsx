@@ -143,7 +143,7 @@ export default function VolunteerDashboard() {
             <motion.div
               key={task.id}
               initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.15 + i * 0.07 }}
-              className={cn('flex items-start gap-3 p-3 rounded-xl border', task.status === 'completed' ? 'border-white/5 opacity-50' : 'border-[hsl(217,32%,18%)]')}
+              className={cn('flex items-start gap-3 p-3 rounded-xl border', task.status === 'completed' ? 'border-white/5 opacity-50' : 'border-border-subtle')}
             >
               <div className={cn('w-5 h-5 rounded-full border-2 flex items-center justify-center mt-0.5 shrink-0',
                 task.status === 'completed' ? 'border-emerald-500 bg-emerald-500/20' :
@@ -216,23 +216,23 @@ export default function VolunteerDashboard() {
             className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
           >
             <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }} exit={{ scale: 0.95 }}
-              className="w-full max-w-md bg-[hsl(222,47%,9%)] border border-[hsl(217,32%,18%)] rounded-2xl p-6 shadow-2xl"
+              className="w-full max-w-md bg-bg-card border border-border-subtle rounded-2xl p-6 shadow-2xl"
             >
               <div className="flex justify-between items-center mb-4">
-                <h3 className="font-bold text-white">Report Incident</h3>
-                <button onClick={() => setShowReport(false)} className="text-gray-500 hover:text-white"><X size={18} /></button>
+                <h3 className="font-bold text-text-primary">Report Incident</h3>
+                <button onClick={() => setShowReport(false)} className="text-text-secondary hover:text-text-primary"><X size={18} /></button>
               </div>
               <form onSubmit={handleSubmit(d => reportIncident.mutate(d))} className="space-y-3">
-                <select {...register('incident_type')} className="w-full bg-[hsl(224,71%,4%)] border border-[hsl(217,32%,18%)] rounded-xl px-3 py-2.5 text-sm text-white outline-none">
+                <select {...register('incident_type')} className="w-full bg-bg-inset border border-border-subtle rounded-xl px-3 py-2.5 text-sm text-text-primary outline-none">
                   {['medical', 'security', 'lost_child', 'fire', 'infrastructure'].map(t => (
                     <option key={t} value={t}>{t.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase())}</option>
                   ))}
                 </select>
-                <input {...register('title')} placeholder="Brief title" className="w-full bg-[hsl(224,71%,4%)] border border-[hsl(217,32%,18%)] rounded-xl px-3 py-2.5 text-sm text-white placeholder:text-gray-600 outline-none" />
-                <input {...register('location')} placeholder="Location (e.g. Gate 7, Section C)" className="w-full bg-[hsl(224,71%,4%)] border border-[hsl(217,32%,18%)] rounded-xl px-3 py-2.5 text-sm text-white placeholder:text-gray-600 outline-none" />
-                <textarea {...register('description')} rows={3} placeholder="Describe what you see..." className="w-full bg-[hsl(224,71%,4%)] border border-[hsl(217,32%,18%)] rounded-xl px-3 py-2.5 text-sm text-white placeholder:text-gray-600 outline-none resize-none" />
+                <input {...register('title')} placeholder="Brief title" className="w-full bg-bg-inset border border-border-subtle rounded-xl px-3 py-2.5 text-sm text-text-primary placeholder:text-text-muted outline-none" />
+                <input {...register('location')} placeholder="Location (e.g. Gate 7, Section C)" className="w-full bg-bg-inset border border-border-subtle rounded-xl px-3 py-2.5 text-sm text-text-primary placeholder:text-text-muted outline-none" />
+                <textarea {...register('description')} rows={3} placeholder="Describe what you see..." className="w-full bg-bg-inset border border-border-subtle rounded-xl px-3 py-2.5 text-sm text-text-primary placeholder:text-text-muted outline-none resize-none" />
                 <div className="flex gap-2 pt-1">
-                  <button type="button" onClick={() => setShowReport(false)} className="flex-1 py-2.5 border border-[hsl(217,32%,18%)] text-gray-400 rounded-xl text-sm hover:text-white transition-colors">Cancel</button>
+                  <button type="button" onClick={() => setShowReport(false)} className="flex-1 py-2.5 border border-border-subtle text-text-secondary rounded-xl text-sm hover:text-text-primary transition-colors">Cancel</button>
                   <button type="submit" disabled={reportIncident.isPending} className="flex-1 py-2.5 bg-red-500 hover:bg-red-600 text-white text-sm font-medium rounded-xl flex items-center justify-center gap-2">
                     {reportIncident.isPending ? <Loader2 size={14} className="animate-spin" /> : '🚨 Submit'}
                   </button>

@@ -56,16 +56,16 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[hsl(224,71%,4%)] flex">
+    <div className="min-h-screen bg-bg-base flex">
       {/* Left panel */}
-      <div className="hidden lg:flex lg:w-1/2 bg-[hsl(222,47%,6%)] border-r border-[hsl(217,32%,18%)] flex-col justify-between p-12">
+      <div className="hidden lg:flex lg:w-1/2 bg-bg-elevated border-r border-border-subtle flex-col justify-between p-12">
         <div>
           <div className="flex items-center gap-2.5 mb-16">
             <div className="w-9 h-9 rounded-xl bg-blue-500 flex items-center justify-center">
               <Zap size={18} className="text-white" />
             </div>
             <div>
-              <p className="font-bold text-white">StadiumOS AI</p>
+              <p className="font-bold text-text-primary">StadiumOS AI</p>
               <p className="text-[10px] text-blue-400">FIFA World Cup 2026</p>
             </div>
           </div>
@@ -146,7 +146,7 @@ export default function LoginPage() {
                 type="email"
                 placeholder="you@stadiumos.ai"
                 autoComplete="email"
-                className="w-full bg-[hsl(222,47%,9%)] border border-[hsl(217,32%,18%)] focus:border-blue-500/60 rounded-xl px-4 py-3 text-sm text-white placeholder:text-gray-600 outline-none transition-colors"
+                className="w-full bg-bg-inset border border-border-subtle focus:border-brand-blue/60 rounded-xl px-4 py-3 text-sm text-text-primary placeholder:text-text-muted outline-none transition-colors"
               />
               {errors.email && <p className="mt-1 text-xs text-red-400">{errors.email.message}</p>}
             </div>
@@ -162,7 +162,7 @@ export default function LoginPage() {
                   type={showPassword ? 'text' : 'password'}
                   placeholder="••••••••"
                   autoComplete="current-password"
-                  className="w-full bg-[hsl(222,47%,9%)] border border-[hsl(217,32%,18%)] focus:border-blue-500/60 rounded-xl px-4 py-3 pr-10 text-sm text-white placeholder:text-gray-600 outline-none transition-colors"
+                  className="w-full bg-bg-inset border border-border-subtle focus:border-brand-blue/60 rounded-xl px-4 py-3 pr-10 text-sm text-text-primary placeholder:text-text-muted outline-none transition-colors"
                 />
                 <button
                   type="button"
@@ -180,7 +180,7 @@ export default function LoginPage() {
                 {...register('remember_me')}
                 type="checkbox"
                 id="remember"
-                className="w-4 h-4 rounded border-[hsl(217,32%,18%)] bg-[hsl(222,47%,9%)] accent-blue-500"
+                className="w-4 h-4 rounded border-border-subtle bg-bg-inset accent-blue-500"
               />
               <label htmlFor="remember" className="text-sm text-gray-400">Remember me</label>
             </div>

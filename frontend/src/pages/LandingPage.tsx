@@ -31,15 +31,15 @@ const testimonials = [
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-[hsl(224,71%,4%)] text-white overflow-x-hidden">
+    <div className="min-h-screen bg-bg-base text-text-primary overflow-x-hidden">
       {/* Navbar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-[hsl(224,71%,4%)]/90 backdrop-blur-md">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-bg-base/90 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-blue-500 flex items-center justify-center">
               <Zap size={16} className="text-white" />
             </div>
-            <span className="font-bold text-sm">StadiumOS AI</span>
+            <span className="font-bold text-text-primary text-sm">StadiumOS AI</span>
           </div>
           <div className="hidden md:flex items-center gap-6 text-sm text-gray-400">
             <a href="#features" className="hover:text-white transition-colors">Features</a>
@@ -128,15 +128,15 @@ export default function LandingPage() {
           transition={{ duration: 0.7, delay: 0.4 }}
           className="mt-16 max-w-4xl mx-auto"
         >
-          <div className="relative bg-[hsl(222,47%,9%)] border border-[hsl(217,32%,18%)] rounded-2xl overflow-hidden shadow-2xl">
+          <div className="relative bg-bg-card border border-border-subtle rounded-2xl overflow-hidden shadow-2xl">
             {/* Mock dashboard preview */}
-            <div className="bg-[hsl(220,56%,7%)] border-b border-[hsl(217,32%,18%)] px-4 py-2.5 flex items-center gap-2">
+            <div className="bg-bg-elevated border-b border-border-subtle px-4 py-2.5 flex items-center gap-2">
               <div className="flex gap-1.5">
                 <div className="w-3 h-3 rounded-full bg-red-500/60" />
                 <div className="w-3 h-3 rounded-full bg-yellow-500/60" />
                 <div className="w-3 h-3 rounded-full bg-green-500/60" />
               </div>
-              <div className="flex-1 mx-4 bg-[hsl(222,47%,9%)] rounded px-3 py-0.5">
+              <div className="flex-1 mx-4 bg-bg-card rounded px-3 py-0.5">
                 <p className="text-xs text-gray-600">stadiumos.ai/dashboard</p>
               </div>
             </div>
@@ -244,7 +244,7 @@ export default function LandingPage() {
       </section>
 
       {/* Testimonials */}
-      <section id="testimonials" className="py-24 px-6 bg-[hsl(222,47%,6%)]">
+      <section id="testimonials" className="py-24 px-6 bg-bg-elevated">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <p className="text-xs font-medium text-emerald-400 uppercase tracking-widest mb-3">Testimonials</p>

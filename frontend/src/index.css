@@ -1,5 +1,29 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
+
+@theme {
+  --color-bg-base: hsl(var(--bg-base));
+  --color-bg-card: hsl(var(--bg-card));
+  --color-bg-elevated: hsl(var(--bg-elevated));
+  --color-bg-inset: hsl(var(--bg-inset));
+  --color-bg-hover: hsl(var(--bg-hover));
+
+  --color-border-subtle: hsl(var(--border-subtle));
+  --color-border-default: hsl(var(--border-default));
+  --color-border-strong: hsl(var(--border-strong));
+
+  --color-text-primary: hsl(var(--text-primary));
+  --color-text-secondary: hsl(var(--text-secondary));
+  --color-text-muted: hsl(var(--text-muted));
+  --color-text-faint: hsl(var(--text-faint));
+
+  --color-brand-blue: hsl(var(--brand-blue));
+  --color-brand-emerald: hsl(var(--brand-emerald));
+  --color-brand-orange: hsl(var(--brand-orange));
+  --color-brand-yellow: hsl(var(--brand-yellow));
+  --color-brand-purple: hsl(var(--brand-purple));
+  --color-brand-red: hsl(var(--brand-red));
+}
+
 
 /* ══════════════════════════════════════════════════════════
    StadiumOS AI — Design Token System
@@ -194,178 +218,25 @@ html[data-theme="light"] {
 }
 
 /* ════════════════════════════════════
-   LIGHT MODE OVERRIDES
-   Target every Tailwind class pattern used in the codebase.
-   Must use specificity or !important to beat Tailwind JIT.
+   ACCESSIBILITY & CHART STYLING
    ════════════════════════════════════ */
 
-/* Main page background */
-html.light body,
-html[data-theme="light"] body {
-  background-color: hsl(214, 32%, 95%) !important;
+/* Recharts grid lines and ticks for light theme visibility */
+html.light .recharts-cartesian-grid-horizontal line,
+html.light .recharts-cartesian-grid-vertical line {
+  stroke: rgba(0, 0, 0, 0.08) !important;
 }
-
-/* ── Content wrappers / page containers ── */
-html.light .bg-\[hsl\(222\,47\%\,5\%\)\],
-html.light .bg-\[hsl\(222\,47\%\,6\%\)\],
-html.light .bg-\[hsl\(222\,47\%\,7\%\)\] {
-  background-color: hsl(214, 32%, 92%) !important;
+html.light .recharts-polar-grid-concentric-polygon,
+html.light .recharts-polar-grid-angle line {
+  stroke: rgba(0, 0, 0, 0.12) !important;
 }
+html.light .recharts-text { fill: hsl(215, 20%, 35%) !important; }
 
-/* Card backgrounds */
-html.light .bg-\[hsl\(222\,47\%\,9\%\)\] {
-  background-color: #ffffff !important;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04) !important;
-}
-
-/* Elevated surface (used in dropdowns, modals, forms) */
-html.light .bg-\[hsl\(220\,56\%\,7\%\)\] {
-  background-color: #f8fafc !important;
-}
-
-/* Scrollable content areas */
-html.light .overflow-y-auto { background-color: transparent; }
-
-/* ── Sidebar stays dark in light mode (intentional) ── */
-/* The sidebar uses --sidebar-bg which stays dark — no override needed */
-
-/* ── Borders ── */
-html.light .border-\[hsl\(217\,32\%\,18\%\)\] {
-  border-color: hsl(214, 32%, 85%) !important;
-}
-html.light .border-\[hsl\(217\,32\%\,22\%\)\],
-html.light .border-\[hsl\(217\,32\%\,28\%\)\] {
-  border-color: hsl(214, 32%, 80%) !important;
-}
-html.light .divide-\[hsl\(var\(--stadium-border\)\)\] > * + * {
-  border-color: hsl(214, 32%, 85%) !important;
-}
-
-/* ── Text ── */
-html.light .text-white {
-  color: hsl(222, 47%, 8%) !important;
-}
-html.light .text-gray-100,
-html.light .text-gray-200 {
-  color: hsl(215, 20%, 20%) !important;
-}
-html.light .text-gray-300 {
-  color: hsl(215, 20%, 30%) !important;
-}
-html.light .text-gray-400 {
-  color: hsl(215, 16%, 42%) !important;
-}
-html.light .text-gray-500 {
-  color: hsl(215, 14%, 50%) !important;
-}
-html.light .text-gray-600 {
-  color: hsl(215, 12%, 40%) !important;
-}
-
-/* ── Transparent overlays ── */
-/* bg-white/3, bg-white/5, bg-white/10 → become very-light black overlays */
-html.light .bg-white\/3  { background-color: rgba(0,0,0,0.025) !important; }
-html.light .bg-white\/5  { background-color: rgba(0,0,0,0.04)  !important; }
-html.light .bg-white\/6  { background-color: rgba(0,0,0,0.05)  !important; }
-html.light .bg-white\/10 { background-color: rgba(0,0,0,0.07)  !important; }
-html.light .bg-white\/12 { background-color: rgba(0,0,0,0.09)  !important;  }
-
-/* hover variants */
-html.light .hover\:bg-white\/5:hover  { background-color: rgba(0,0,0,0.04) !important; }
-html.light .hover\:bg-white\/10:hover { background-color: rgba(0,0,0,0.07) !important; }
-html.light .hover\:bg-white\/12:hover { background-color: rgba(0,0,0,0.09) !important; }
-
-/* ── Inputs & selects in light mode ── */
-html.light input,
-html.light select,
-html.light textarea {
-  background-color: #ffffff !important;
-  border-color: hsl(214, 32%, 82%) !important;
-  color: hsl(222, 47%, 8%) !important;
-}
-html.light input::placeholder,
-html.light textarea::placeholder {
-  color: hsl(215, 16%, 60%) !important;
-}
-html.light input:focus,
-html.light select:focus,
-html.light textarea:focus {
-  border-color: hsl(217, 91%, 55%) !important;
-  box-shadow: 0 0 0 3px hsl(217, 91%, 55%, 0.1) !important;
-}
-
-/* ── Blue tinted cards (action alerts, AI boxes) in light mode ── */
-html.light .bg-blue-500\/5   { background-color: hsl(217, 91%, 97%) !important; }
-html.light .bg-blue-500\/8   { background-color: hsl(217, 91%, 96%) !important; }
-html.light .bg-blue-500\/10  { background-color: hsl(217, 91%, 95%) !important; }
-html.light .bg-blue-500\/15  { background-color: hsl(217, 91%, 93%) !important; }
-html.light .bg-blue-500\/20  { background-color: hsl(217, 91%, 90%) !important; }
-
-/* ── Emerald tinted cards in light mode ── */
-html.light .bg-emerald-500\/5  { background-color: hsl(160, 60%, 96%) !important; }
-html.light .bg-emerald-500\/8  { background-color: hsl(160, 60%, 95%) !important; }
-html.light .bg-emerald-500\/10 { background-color: hsl(160, 60%, 94%) !important; }
-html.light .bg-emerald-500\/15 { background-color: hsl(160, 60%, 92%) !important; }
-html.light .bg-emerald-500\/20 { background-color: hsl(160, 60%, 90%) !important; }
-
-/* ── Red tinted cards ── */
-html.light .bg-red-500\/5   { background-color: hsl(0, 84%, 97%) !important; }
-html.light .bg-red-500\/10  { background-color: hsl(0, 84%, 95%) !important; }
-html.light .bg-red-500\/15  { background-color: hsl(0, 84%, 93%) !important; }
-html.light .bg-red-500\/20  { background-color: hsl(0, 84%, 91%) !important; }
-
-/* ── Yellow/amber tinted cards ── */
-html.light .bg-yellow-500\/5   { background-color: hsl(43, 96%, 97%) !important; }
-html.light .bg-yellow-500\/10  { background-color: hsl(43, 96%, 95%) !important; }
-html.light .bg-orange-500\/10  { background-color: hsl(25, 95%, 95%) !important; }
-
-/* ── Hover states for cards ── */
-html.light .hover\:bg-blue-500\/20:hover    { background-color: hsl(217, 91%, 88%) !important; }
-html.light .hover\:bg-emerald-500\/20:hover { background-color: hsl(160, 60%, 88%) !important; }
-html.light .hover\:bg-red-500\/20:hover     { background-color: hsl(0, 84%, 89%) !important; }
-html.light .hover\:bg-yellow-500\/20:hover  { background-color: hsl(43, 96%, 89%) !important; }
-
-/* ── Main content area background behind pages ── */
-html.light main,
-html.light [class*="overflow-y-auto"][class*="flex-1"] {
-  background-color: hsl(214, 32%, 95%) !important;
-}
-
-/* ── Table / list alternating rows ── */
-html.light .odd\:bg-white\/3:nth-child(odd) {
-  background-color: hsl(214, 32%, 97%) !important;
-}
-
-/* ── Charts: recharts tooltip ── */
-html.light .recharts-tooltip-wrapper .recharts-default-tooltip {
+/* Chart custom tooltips */
+html.light .recharts-tooltip-wrapper > div {
   background-color: #ffffff !important;
   border-color: hsl(214, 32%, 85%) !important;
-  color: hsl(222, 47%, 8%) !important;
-}
-
-/* ── Accent brand text stays colored in light mode ── */
-html.light .text-blue-400   { color: hsl(217, 80%, 42%) !important; }
-html.light .text-blue-300   { color: hsl(217, 80%, 38%) !important; }
-html.light .text-emerald-400 { color: hsl(160, 70%, 30%) !important; }
-html.light .text-emerald-300 { color: hsl(160, 70%, 26%) !important; }
-html.light .text-red-400    { color: hsl(0, 72%, 42%) !important; }
-html.light .text-orange-400 { color: hsl(25, 85%, 38%) !important; }
-html.light .text-yellow-400 { color: hsl(43, 80%, 38%) !important; }
-html.light .text-purple-400 { color: hsl(263, 55%, 42%) !important; }
-html.light .text-cyan-400   { color: hsl(188, 75%, 36%) !important; }
-
-/* ── Stat numbers stay white on colored backgrounds ── */
-html.light [class*="bg-blue-500"][class*="text-white"],
-html.light [class*="bg-emerald-500"][class*="text-white"],
-html.light [class*="bg-red-500"][class*="text-white"],
-html.light .btn-filled .text-white {
-  color: #ffffff !important;
-}
-
-/* ── Gradient buttons stay vibrant ── */
-html.light .bg-gradient-to-r.from-blue-600,
-html.light .from-blue-600 {
-  background-image: linear-gradient(to right, hsl(221 83% 48%), hsl(217 91% 56%)) !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
 }
 
 /* ════════════════════════════════════
@@ -387,101 +258,6 @@ html.high-contrast .text-gray-600 {
   color: #e0d090 !important;
 }
 
-/* ════════════════════════════════════
-   MISSING PATTERN OVERRIDES
-   (Additional patterns found across pages)
-   ════════════════════════════════════ */
-
-/* Input dark variants used in Settings, Login, Register etc */
-html.light .bg-\[hsl\(224\,71\%\,4\%\)\] {
-  background-color: #ffffff !important;
-  border-color: hsl(214, 32%, 82%) !important;
-}
-
-/* Another common bg variant */
-html.light .bg-\[hsl\(222\,47\%\,11\%\)\],
-html.light .bg-\[hsl\(222\,47\%\,12\%\)\],
-html.light .bg-\[hsl\(222\,47\%\,13\%\)\],
-html.light .bg-\[hsl\(222\,47\%\,14\%\)\] {
-  background-color: hsl(214, 20%, 96%) !important;
-}
-
-/* Borders with 12% lightness */
-html.light .border-\[hsl\(217\,32\%\,12\%\)\],
-html.light .border-\[hsl\(217\,32\%\,14\%\)\],
-html.light .border-\[hsl\(217\,32\%\,15\%\)\] {
-  border-color: hsl(214, 32%, 88%) !important;
-}
-
-/* Divide utilities */
-html.light .divide-\[hsl\(217\,32\%\,12\%\)\] > * + *,
-html.light .divide-\[hsl\(217\,32\%\,14\%\)\] > * + *,
-html.light .divide-\[hsl\(217\,32\%\,18\%\)\] > * + * {
-  border-color: hsl(214, 32%, 88%) !important;
-}
-
-/* Recharts chart grid lines and ticks — keep them subtle in both modes */
-html.light .recharts-cartesian-grid-horizontal line,
-html.light .recharts-cartesian-grid-vertical line {
-  stroke: rgba(0, 0, 0, 0.06) !important;
-}
-html.light .recharts-polar-grid-concentric-polygon,
-html.light .recharts-polar-grid-angle line {
-  stroke: rgba(0, 0, 0, 0.1) !important;
-}
-html.light .recharts-text { fill: hsl(215, 14%, 45%) !important; }
-
-/* Chart custom tooltips */
-html.light .recharts-tooltip-wrapper > div {
-  background-color: #ffffff !important;
-  border-color: hsl(214, 32%, 85%) !important;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
-}
-
-/* Landmark headers like "OPERATIONAL INTELLIGENCE" */
-html.light .text-gray-600 { color: hsl(215, 16%, 44%) !important; }
-
-/* Hover bg for table rows */
-html.light .hover\:bg-white\/2:hover { background-color: rgba(0,0,0,0.015) !important; }
-html.light .hover\:bg-white\/3:hover { background-color: rgba(0,0,0,0.025) !important; }
-
-/* Progress / density bars background */
-html.light .bg-white\/5  { background-color: rgba(0,0,0,0.06) !important; }
-html.light .bg-white\/8  { background-color: rgba(0,0,0,0.08) !important; }
-html.light .bg-white\/4  { background-color: rgba(0,0,0,0.04) !important; }
-
-/* Tab pill backgrounds */
-html.light .bg-\[hsl\(222\,47\%\,7\%\)\] {
-  background-color: hsl(214, 30%, 92%) !important;
-  border-color: hsl(214, 32%, 86%) !important;
-}
-
-/* Landing page & public pages */
-html.light .from-\[hsl\(224\,71\%\,4\%\)\],
-html.light .from-\[hsl\(222\,47\%\,6\%\)\] {
-  --tw-gradient-from: hsl(214, 32%, 95%) !important;
-}
-
-/* Skeleton loaders */
-html.light .animate-pulse .bg-white\/5,
-html.light .animate-pulse .bg-white\/3 {
-  background-color: hsl(214, 30%, 90%) !important;
-}
-
-/* Status badge borders — keep them colored */
-html.light .border-emerald-500\/20 { border-color: hsl(160, 60%, 75%) !important; }
-html.light .border-yellow-500\/20  { border-color: hsl(43, 80%, 75%) !important; }
-html.light .border-red-500\/20     { border-color: hsl(0, 72%, 78%) !important; }
-html.light .border-blue-500\/20    { border-color: hsl(217, 80%, 78%) !important; }
-html.light .border-orange-500\/20  { border-color: hsl(25, 85%, 75%) !important; }
-
-/* Modal / overlay backgrounds */
-html.light .bg-black\/60,
-html.light .bg-black\/50,
-html.light .bg-black\/40 {
-  background-color: rgba(15, 23, 42, 0.5) !important;
-}
-
 /* Inline code / monospace elements */
 html.light code {
   background-color: hsl(214, 30%, 92%) !important;
@@ -492,6 +268,7 @@ html.light code {
 html.light select {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%2364748b' d='M4 6l4 4 4-4'/%3E%3C/svg%3E") !important;
 }
+
 
 /* ════════════════════════════════════
    TRANSITION: smooth theme switch

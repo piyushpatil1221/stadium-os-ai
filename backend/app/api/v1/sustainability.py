@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from app.core.database import get_db
-from app.core.deps import get_current_user
+from app.core.deps import require_role
 from app.models.user import User
 from app.models.alert import Alert, Sustainability
 from app.services.ai_service import generate_sustainability_insight, generate_operational_insight
@@ -12,7 +12,7 @@ router = APIRouter(prefix="/sustainability", tags=["Sustainability"])
 @router.get("/")
 def get_sustainability_metrics(
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_role("staff", "organizer")),
 ):
     """Get all sustainability metrics."""
     metrics = db.query(Sustainability).all()
@@ -32,7 +32,7 @@ def get_sustainability_metrics(
 
 @router.get("/insight")
 def get_sustainability_insight(
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_role("staff", "organizer")),
 ):
     """Get AI-powered sustainability recommendation."""
     return {"insight": generate_sustainability_insight()}
@@ -44,7 +44,7 @@ router_alerts = APIRouter(prefix="/alerts", tags=["Alerts"])
 @router_alerts.get("/")
 def get_alerts(
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_role("staff", "organizer", "volunteer")),
 ):
     """Get all active alerts."""
     alerts = db.query(Alert).filter(Alert.is_active == True).order_by(Alert.created_at.desc()).all()

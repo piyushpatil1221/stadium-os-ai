@@ -192,7 +192,7 @@ export default function TournamentPage() {
       <div className="grid lg:grid-cols-3 gap-4">
         {/* Revenue by stage */}
         <div className="col-span-2 stadium-card p-5">
-          <h3 className="font-semibold text-white text-sm mb-1">Revenue by Stage</h3>
+          <h3 className="font-semibold text-text-primary text-sm mb-1">Revenue by Stage</h3>
           <p className="text-xs text-gray-500 mb-5">Total revenue ($M) per tournament stage — live data</p>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={revenueByStage}>
@@ -201,7 +201,7 @@ export default function TournamentPage() {
               <YAxis tick={{ fill: '#6b7280', fontSize: 11 }} axisLine={false} tickLine={false} unit="M" />
               <Tooltip
                 formatter={(v: any) => [`$${v}M`, 'Revenue']}
-                contentStyle={{ background: 'hsl(222,47%,9%)', border: '1px solid hsl(217,32%,18%)', borderRadius: 8, fontSize: 12 }}
+                contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: 8, fontSize: 12 }}
               />
               <Bar dataKey="revenue" fill="#10b981" radius={[4,4,0,0]} />
             </BarChart>
@@ -210,7 +210,7 @@ export default function TournamentPage() {
 
         {/* Fan nationality */}
         <div className="stadium-card p-5">
-          <h3 className="font-semibold text-white text-sm mb-1">Fan Nationality</h3>
+          <h3 className="font-semibold text-text-primary text-sm mb-1">Fan Nationality</h3>
           <p className="text-xs text-gray-500 mb-4">Distribution of today's attendance</p>
           <div className="flex items-center justify-center">
             <PieChart width={160} height={160}>
@@ -237,7 +237,7 @@ export default function TournamentPage() {
         <div className="stadium-card p-5">
           <div className="flex items-center gap-2 mb-4">
             <TrendingUp size={16} className="text-blue-400" />
-            <h3 className="font-semibold text-white text-sm">Per-Match Attendance</h3>
+            <h3 className="font-semibold text-text-primary text-sm">Per-Match Attendance</h3>
           </div>
           {attendanceChartData.length > 0 ? (
             <ResponsiveContainer width="100%" height={200}>
@@ -247,7 +247,7 @@ export default function TournamentPage() {
                 <YAxis tickFormatter={(v: number) => `${(v/1000).toFixed(0)}K`} tick={{ fill: '#6b7280', fontSize: 11 }} axisLine={false} tickLine={false} />
                 <Tooltip
                   formatter={(v: any) => [Number(v ?? 0).toLocaleString(), 'Attendance']}
-                  contentStyle={{ background: 'hsl(222,47%,9%)', border: '1px solid hsl(217,32%,18%)', borderRadius: 8, fontSize: 12 }}
+                  contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: 8, fontSize: 12 }}
                 />
                 <Bar dataKey="attendance" fill="#3b82f6" radius={[4,4,0,0]} />
                 <Bar dataKey="capacity" fill="rgba(255,255,255,0.05)" radius={[4,4,0,0]} />
@@ -284,14 +284,14 @@ export default function TournamentPage() {
 
       {/* ── Match schedule table (real data from store) ── */}
       <div className="stadium-card p-5">
-        <h3 className="font-semibold text-white text-sm mb-4 flex items-center gap-2">
+        <h3 className="font-semibold text-text-primary text-sm mb-4 flex items-center gap-2">
           <Trophy size={16} className="text-yellow-400" /> Match Schedule
           <span className="ml-auto text-[10px] text-gray-500 font-normal">Synced with Organizer Command Center</span>
         </h3>
         <div className="overflow-x-auto">
           <table className="w-full text-xs">
             <thead>
-              <tr className="text-gray-500 border-b border-[hsl(217,32%,18%)]">
+              <tr className="text-text-secondary border-b border-border-subtle">
                 <th className="text-left pb-3 font-medium">Match</th>
                 <th className="text-left pb-3 font-medium hidden sm:table-cell">Stage</th>
                 <th className="text-left pb-3 font-medium">Score</th>
@@ -302,13 +302,13 @@ export default function TournamentPage() {
                 <th className="text-left pb-3 font-medium hidden sm:table-cell">Date</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[hsl(217,32%,12%)]">
+            <tbody className="divide-y divide-border-subtle">
               {matches.map(m => {
                 const att = m.status === 'live' ? currentAttendance : (m.actualAttendance ?? m.expectedAttendance)
                 const rev = calcRevenue(att, m.ticketPrice)
                 return (
                   <tr key={m.id} className="hover:bg-white/2 transition-colors">
-                    <td className="py-3 font-semibold text-white">
+                    <td className="py-3 font-semibold text-text-primary">
                       <div className="flex items-center gap-2">
                         <span>{m.homeFlag}</span><span>{m.home}</span>
                         <span className="text-gray-600">vs</span>

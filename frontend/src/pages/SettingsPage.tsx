@@ -57,12 +57,12 @@ export default function SettingsPage() {
   return (
     <div className="p-6 max-w-3xl mx-auto space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-white">Settings</h1>
+        <h1 className="text-2xl font-bold text-text-primary">Settings</h1>
         <p className="text-gray-400 text-sm mt-1">Manage your account and platform preferences</p>
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 p-1 bg-[hsl(220,56%,7%)] border border-[hsl(217,32%,18%)] rounded-xl w-fit">
+      <div className="flex gap-1 p-1 bg-bg-inset border border-border-subtle rounded-xl w-fit">
         {tabs.map(tab => (
           <button
             key={tab.id}
@@ -70,7 +70,7 @@ export default function SettingsPage() {
             className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
               activeTab === tab.id
                 ? 'bg-blue-500/20 text-blue-400 border border-blue-500/20'
-                : 'text-gray-400 hover:text-white'
+                : 'text-text-secondary hover:text-text-primary'
             }`}
           >
             {tab.icon} {tab.label}
@@ -107,7 +107,7 @@ export default function SettingsPage() {
                 <label className="block text-xs font-medium text-gray-400 mb-1.5">Full Name</label>
                 <input
                   {...register('full_name')}
-                  className="w-full bg-[hsl(224,71%,4%)] border border-[hsl(217,32%,18%)] focus:border-blue-500/60 rounded-xl px-4 py-2.5 text-sm text-white outline-none transition-colors"
+                  className="w-full bg-bg-inset border border-border-subtle focus:border-brand-blue/60 rounded-xl px-4 py-2.5 text-sm text-text-primary outline-none transition-colors"
                 />
               </div>
               <div>
@@ -115,7 +115,7 @@ export default function SettingsPage() {
                 <input
                   value={user?.email ?? ''}
                   readOnly
-                  className="w-full bg-[hsl(224,71%,4%)] border border-[hsl(217,32%,18%)] rounded-xl px-4 py-2.5 text-sm text-gray-500 cursor-not-allowed outline-none"
+                  className="w-full bg-bg-inset border border-border-subtle rounded-xl px-4 py-2.5 text-sm text-text-muted cursor-not-allowed outline-none"
                 />
               </div>
             </div>
@@ -124,7 +124,7 @@ export default function SettingsPage() {
               <label className="block text-xs font-medium text-gray-400 mb-1.5">Preferred Language</label>
               <select
                 {...register('preferred_language')}
-                className="w-full bg-[hsl(224,71%,4%)] border border-[hsl(217,32%,18%)] focus:border-blue-500/60 rounded-xl px-4 py-2.5 text-sm text-white outline-none"
+                className="w-full bg-bg-inset border border-border-subtle focus:border-brand-blue/60 rounded-xl px-4 py-2.5 text-sm text-text-primary outline-none"
               >
                 {languages.map(l => <option key={l.value} value={l.value}>{l.label}</option>)}
               </select>
@@ -136,7 +136,7 @@ export default function SettingsPage() {
                 {...register('accessibility_needs')}
                 rows={3}
                 placeholder="e.g. Wheelchair user, visual impairment, hearing aid..."
-                className="w-full bg-[hsl(224,71%,4%)] border border-[hsl(217,32%,18%)] focus:border-blue-500/60 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-gray-600 outline-none resize-none transition-colors"
+                className="w-full bg-bg-inset border border-border-subtle focus:border-brand-blue/60 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted outline-none resize-none transition-colors"
               />
             </div>
 
@@ -173,9 +173,9 @@ export default function SettingsPage() {
             { label: 'Weather Advisories', desc: 'Stadium weather and safety updates', enabled: false },
             { label: 'Match Score Updates', desc: 'Live score notifications', enabled: false },
           ].map((item, i) => (
-            <div key={i} className="flex items-center justify-between py-3 border-b border-[hsl(217,32%,12%)] last:border-0">
+            <div key={i} className="flex items-center justify-between py-3 border-b border-border-subtle last:border-0">
               <div>
-                <p className="text-sm text-white font-medium">{item.label}</p>
+                <p className="text-sm text-text-primary font-medium">{item.label}</p>
                 <p className="text-xs text-gray-500 mt-0.5">{item.desc}</p>
               </div>
               <div className={`w-9 h-5 rounded-full cursor-pointer transition-colors ${item.enabled ? 'bg-blue-500' : 'bg-white/10'}`}>
@@ -188,14 +188,14 @@ export default function SettingsPage() {
 
       {activeTab === 'security' && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="stadium-card p-6 space-y-5">
-          <h3 className="text-sm font-semibold text-white">Security Settings</h3>
+          <h3 className="text-sm font-semibold text-text-primary">Security Settings</h3>
           <div>
             <label className="block text-xs font-medium text-gray-400 mb-1.5">Current Password</label>
-            <input type="password" placeholder="••••••••" className="w-full bg-[hsl(224,71%,4%)] border border-[hsl(217,32%,18%)] rounded-xl px-4 py-2.5 text-sm text-white outline-none" />
+            <input type="password" placeholder="••••••••" className="w-full bg-bg-inset border border-border-subtle rounded-xl px-4 py-2.5 text-sm text-text-primary outline-none" />
           </div>
           <div>
             <label className="block text-xs font-medium text-gray-400 mb-1.5">New Password</label>
-            <input type="password" placeholder="8+ characters" className="w-full bg-[hsl(224,71%,4%)] border border-[hsl(217,32%,18%)] rounded-xl px-4 py-2.5 text-sm text-white outline-none" />
+            <input type="password" placeholder="8+ characters" className="w-full bg-bg-inset border border-border-subtle rounded-xl px-4 py-2.5 text-sm text-text-primary outline-none" />
           </div>
           <button className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium px-5 py-2.5 rounded-xl transition-all">
             <Shield size={15} /> Update Password
@@ -213,7 +213,7 @@ export default function SettingsPage() {
                 className={`p-3 rounded-xl border text-left transition-all ${
                   user?.preferred_language === lang.value
                     ? 'border-blue-500/40 bg-blue-500/10 text-blue-400'
-                    : 'border-[hsl(217,32%,18%)] text-gray-300 hover:border-[hsl(217,32%,28%)]'
+                    : 'border-border-subtle text-text-secondary hover:border-border-strong'
                 }`}
               >
                 <p className="text-sm font-medium">{lang.label}</p>

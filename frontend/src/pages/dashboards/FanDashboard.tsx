@@ -85,15 +85,15 @@ export default function FanDashboard() {
       <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
         <div className="flex items-start justify-between">
           <div>
-            <h1 className="text-xl font-bold text-white">Welcome, {user?.full_name?.split(' ')[0]}! 👋</h1>
+            <h1 className="text-xl font-bold text-text-primary">Welcome, {user?.full_name?.split(' ')[0]}! 👋</h1>
             <p className="text-gray-400 text-sm mt-0.5">USA vs MEX · SoFi Stadium · <span className="text-red-400 font-medium">LIVE 67'</span></p>
           </div>
           {/* Live score */}
           <div className="text-right">
-            <div className="flex items-center gap-2 px-3 py-2 bg-[hsl(222,47%,9%)] border border-[hsl(217,32%,18%)] rounded-xl">
-              <span className="text-sm font-bold text-white">USA</span>
+            <div className="flex items-center gap-2 px-3 py-2 bg-bg-card border border-border-subtle rounded-xl">
+              <span className="text-sm font-bold text-text-primary">USA</span>
               <span className="text-lg font-black text-blue-400">2–1</span>
-              <span className="text-sm font-bold text-white">MEX</span>
+              <span className="text-sm font-bold text-text-primary">MEX</span>
             </div>
             <div className="flex items-center justify-end gap-1 mt-1">
               <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
@@ -168,13 +168,13 @@ export default function FanDashboard() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: i * 0.06 }}
               onClick={() => navigate(item.path)}
-              className="flex items-center gap-4 p-4 stadium-card hover:border-[hsl(217,32%,28%)] transition-all text-left group"
+              className="flex items-center gap-4 p-4 stadium-card hover:border-border-strong transition-all text-left group"
             >
               <div className={cn('w-10 h-10 rounded-xl border flex items-center justify-center shrink-0', colorMap[item.color])}>
                 {item.icon}
               </div>
               <div className="flex-1">
-                <p className="text-sm font-semibold text-white">{item.label}</p>
+                <p className="text-sm font-semibold text-text-primary">{item.label}</p>
                 <p className="text-xs text-gray-500">{item.desc}</p>
               </div>
               <ChevronRight size={16} className="text-gray-600 group-hover:text-gray-400 transition-colors" />
@@ -197,7 +197,7 @@ export default function FanDashboard() {
                 'flex items-center gap-1.5 px-3 py-2 rounded-xl border text-sm transition-all',
                 lang === l.code
                   ? 'border-blue-500/40 bg-blue-500/10 text-blue-400'
-                  : 'border-[hsl(217,32%,18%)] text-gray-400 hover:border-[hsl(217,32%,28%)] hover:text-gray-200',
+                  : 'border-border-subtle text-text-secondary hover:border-border-strong hover:text-text-primary',
               )}
             >
               <span>{l.flag}</span> {l.label}
@@ -272,7 +272,7 @@ export default function FanDashboard() {
                     onChange={e => setChatInput(e.target.value)}
                     onKeyDown={e => e.key === 'Enter' && sendMessage()}
                     placeholder="Ask about your seat, food, transport..."
-                    className="flex-1 bg-[hsl(224,71%,4%)] border border-[hsl(217,32%,18%)] rounded-xl px-3 py-2.5 text-sm text-white placeholder:text-gray-600 outline-none focus:border-blue-500/50 transition-colors"
+                    className="flex-1 bg-bg-inset border border-border-subtle rounded-xl px-3 py-2.5 text-sm text-text-primary placeholder:text-text-muted outline-none focus:border-brand-blue/50 transition-colors"
                   />
                   <button
                     onClick={sendMessage}

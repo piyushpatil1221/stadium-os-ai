@@ -94,11 +94,11 @@ export default function IncidentsPage() {
               initial={{ scale: 0.95, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95 }}
-              className="w-full max-w-lg bg-[hsl(222,47%,9%)] border border-[hsl(217,32%,18%)] rounded-2xl p-6 shadow-2xl"
+              className="w-full max-w-lg bg-bg-card border border-border-subtle rounded-2xl p-6 shadow-2xl"
             >
               <div className="flex items-center justify-between mb-5">
-                <h3 className="font-bold text-white">Report Incident</h3>
-                <button onClick={() => setShowForm(false)} className="text-gray-500 hover:text-white transition-colors">
+                <h3 className="font-bold text-text-primary">Report Incident</h3>
+                <button onClick={() => setShowForm(false)} className="text-text-secondary hover:text-text-primary transition-colors">
                   <X size={20} />
                 </button>
               </div>
@@ -131,7 +131,7 @@ export default function IncidentsPage() {
                   <input
                     {...register('title')}
                     placeholder="Brief incident description"
-                    className="w-full bg-[hsl(224,71%,4%)] border border-[hsl(217,32%,18%)] focus:border-blue-500/60 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-gray-600 outline-none transition-colors"
+                    className="w-full bg-bg-inset border border-border-subtle focus:border-brand-blue/60 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted outline-none transition-colors"
                   />
                   {errors.title && <p className="mt-1 text-xs text-red-400">{errors.title.message}</p>}
                 </div>
@@ -141,7 +141,7 @@ export default function IncidentsPage() {
                   <input
                     {...register('location')}
                     placeholder="e.g. Section B12, Gate 3"
-                    className="w-full bg-[hsl(224,71%,4%)] border border-[hsl(217,32%,18%)] focus:border-blue-500/60 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-gray-600 outline-none transition-colors"
+                    className="w-full bg-bg-inset border border-border-subtle focus:border-brand-blue/60 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted outline-none transition-colors"
                   />
                   {errors.location && <p className="mt-1 text-xs text-red-400">{errors.location.message}</p>}
                 </div>
@@ -150,7 +150,7 @@ export default function IncidentsPage() {
                   <label className="block text-xs font-medium text-gray-400 mb-1.5">Zone</label>
                   <select
                     {...register('zone')}
-                    className="w-full bg-[hsl(224,71%,4%)] border border-[hsl(217,32%,18%)] focus:border-blue-500/60 rounded-xl px-4 py-2.5 text-sm text-white outline-none"
+                    className="w-full bg-bg-inset border border-border-subtle focus:border-brand-blue/60 rounded-xl px-4 py-2.5 text-sm text-text-primary outline-none"
                   >
                     <option value="">Select zone (optional)</option>
                     {ZONES.map(z => <option key={z} value={z}>{z}</option>)}
@@ -163,13 +163,13 @@ export default function IncidentsPage() {
                     {...register('description')}
                     rows={3}
                     placeholder="Describe the incident in detail..."
-                    className="w-full bg-[hsl(224,71%,4%)] border border-[hsl(217,32%,18%)] focus:border-blue-500/60 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-gray-600 outline-none transition-colors resize-none"
+                    className="w-full bg-bg-inset border border-border-subtle focus:border-brand-blue/60 rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted outline-none transition-colors resize-none"
                   />
                   {errors.description && <p className="mt-1 text-xs text-red-400">{errors.description.message}</p>}
                 </div>
 
                 <div className="flex gap-3 pt-1">
-                  <button type="button" onClick={() => setShowForm(false)} className="flex-1 py-2.5 rounded-xl border border-[hsl(217,32%,18%)] text-gray-400 text-sm hover:text-white transition-colors">
+                  <button type="button" onClick={() => setShowForm(false)} className="flex-1 py-2.5 rounded-xl border border-border-subtle text-text-secondary text-sm hover:text-text-primary transition-colors">
                     Cancel
                   </button>
                   <button

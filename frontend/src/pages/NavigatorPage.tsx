@@ -322,7 +322,7 @@ export default function NavigatorPage() {
             <div>
               <label className="block text-xs font-medium text-gray-400 mb-1.5">📍 Current Location</label>
               <select {...register('from_location')}
-                className="w-full bg-[hsl(222,47%,9%)] border border-[hsl(217,32%,18%)] focus:border-blue-500/60 rounded-xl px-4 py-3 text-sm text-white outline-none transition-colors"
+                className="w-full bg-bg-inset border border-border-subtle focus:border-brand-blue/60 rounded-xl px-4 py-3 text-sm text-text-primary outline-none transition-colors"
               >
                 <option value="">Select starting point…</option>
                 {LOCATIONS.map(l => <option key={l} value={l}>{l}</option>)}
@@ -334,7 +334,7 @@ export default function NavigatorPage() {
             <div>
               <label className="block text-xs font-medium text-gray-400 mb-1.5">🏁 Destination</label>
               <select {...register('to_location')}
-                className="w-full bg-[hsl(222,47%,9%)] border border-[hsl(217,32%,18%)] focus:border-blue-500/60 rounded-xl px-4 py-3 text-sm text-white outline-none transition-colors"
+                className="w-full bg-bg-inset border border-border-subtle focus:border-brand-blue/60 rounded-xl px-4 py-3 text-sm text-text-primary outline-none transition-colors"
               >
                 <option value="">Select destination…</option>
                 {LOCATIONS.map(l => <option key={l} value={l}>{l}</option>)}
@@ -351,7 +351,7 @@ export default function NavigatorPage() {
                     className={`flex flex-col items-center gap-1.5 p-3 rounded-xl border cursor-pointer transition-all text-center ${
                       watchRouteType === type
                         ? 'border-blue-500/50 bg-blue-500/10 text-blue-400'
-                        : 'border-[hsl(217,32%,18%)] text-gray-400 hover:border-[hsl(217,32%,28%)]'
+                        : 'border-border-subtle text-text-secondary hover:border-border-strong'
                     }`}
                   >
                     <input type="radio" {...register('route_type')} value={type} className="hidden" />
@@ -368,7 +368,7 @@ export default function NavigatorPage() {
                 { key: 'wheelchair_accessible' as const, icon: <Accessibility size={15} className="text-emerald-400" />, label: 'Wheelchair accessible', val: watchAccessible, color: 'bg-emerald-500' },
                 { key: 'avoid_crowds'          as const, icon: <AlertTriangle  size={15} className="text-yellow-400"  />, label: 'Avoid crowded areas',  val: watchAvoidCrowds, color: 'bg-yellow-500' },
               ]).map(t => (
-                <div key={t.key} className="flex items-center justify-between p-3 bg-[hsl(222,47%,9%)] border border-[hsl(217,32%,18%)] rounded-xl">
+                <div key={t.key} className="flex items-center justify-between p-3 bg-bg-card border border-border-subtle rounded-xl">
                   <div className="flex items-center gap-2">
                     {t.icon}
                     <span className="text-sm text-gray-300">{t.label}</span>
@@ -396,7 +396,7 @@ export default function NavigatorPage() {
           <AnimatePresence>
             {result && (
               <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-                className="bg-[hsl(222,47%,9%)] border border-blue-500/20 rounded-xl p-4 space-y-3"
+                className="bg-bg-card border border-brand-blue/20 rounded-xl p-4 space-y-3"
               >
                 <div className="flex items-center gap-2">
                   <div className="w-6 h-6 rounded-md bg-blue-500/10 flex items-center justify-center">
@@ -467,11 +467,11 @@ export default function NavigatorPage() {
         </div>
 
         {/* ── Right panel: SVG map ── */}
-        <div className="lg:col-span-3 bg-[hsl(222,47%,9%)] border border-[hsl(217,32%,18%)] rounded-xl p-5">
+        <div className="lg:col-span-3 bg-bg-card border border-border-subtle rounded-xl p-5">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <MapPin size={14} className="text-blue-400" />
-              <h3 className="font-semibold text-white text-sm">Stadium Map — SoFi Stadium</h3>
+              <h3 className="font-semibold text-text-primary text-sm">Stadium Map — SoFi Stadium</h3>
             </div>
             {result && (
               <span className="text-xs text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 rounded-full animate-pulse">
@@ -480,10 +480,10 @@ export default function NavigatorPage() {
             )}
           </div>
 
-          <div className="bg-[hsl(222,47%,6%)] rounded-xl overflow-hidden">
+          <div className="bg-bg-base border border-border-subtle rounded-xl overflow-hidden">
             <svg viewBox="0 0 700 510" className="w-full" style={{ height: 400 }}>
               {/* Background */}
-              <rect width="700" height="510" fill="hsl(222,47%,6%)" />
+              <rect width="700" height="510" fill="var(--bg-base)" />
 
               {/* Subtle grid */}
               {[...Array(8)].map((_, i)  => <line key={`h${i}`} x1="0" y1={i*64} x2="700" y2={i*64} stroke="rgba(255,255,255,0.02)" strokeWidth="1" />)}

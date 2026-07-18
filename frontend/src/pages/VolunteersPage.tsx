@@ -92,7 +92,7 @@ export default function VolunteersPage() {
       {/* Volunteer roster */}
       <div className="stadium-card p-5">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-semibold text-white text-sm">Volunteer Roster</h3>
+          <h3 className="font-semibold text-text-primary text-sm">Volunteer Roster</h3>
           <span className="text-xs text-gray-500">{volunteers?.length ?? 0} registered</span>
         </div>
         {isLoading ? (
@@ -103,7 +103,7 @@ export default function VolunteersPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-xs">
               <thead>
-                <tr className="text-gray-500 border-b border-[hsl(217,32%,18%)]">
+                <tr className="text-text-secondary border-b border-border-subtle">
                   <th className="text-left pb-3 font-medium">Badge</th>
                   <th className="text-left pb-3 font-medium">Role</th>
                   <th className="text-left pb-3 font-medium">Zone</th>
@@ -113,7 +113,7 @@ export default function VolunteersPage() {
                   <th className="text-left pb-3 font-medium">Check In</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[hsl(217,32%,12%)]">
+              <tbody className="divide-y divide-border-subtle">
                 {volunteers?.map((v) => (
                   <tr key={v.id} className="hover:bg-white/2 transition-colors">
                     <td className="py-3 font-mono text-gray-300">{v.badge_number}</td>

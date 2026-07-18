@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from app.core.database import get_db
-from app.core.deps import get_current_user
+from app.core.deps import get_current_user, require_role
 from app.models.user import User
 from app.models.incident import Incident
 from app.schemas.schemas import IncidentCreate, IncidentUpdate, IncidentOut
@@ -16,7 +16,7 @@ def list_incidents(
     status: Optional[str] = None,
     incident_type: Optional[str] = None,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_role("staff", "organizer", "volunteer")),
 ):
     """List all incidents with optional filtering."""
     query = db.query(Incident)
@@ -31,7 +31,7 @@ def list_incidents(
 def create_incident(
     incident_data: IncidentCreate,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_role("staff", "organizer", "volunteer")),
 ):
     """Report a new incident. AI will automatically analyze and assign severity."""
     ai = generate_incident_ai_analysis(
@@ -62,7 +62,7 @@ def create_incident(
 def get_incident(
     incident_id: int,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_role("staff", "organizer")),
 ):
     """Get a specific incident by ID."""
     incident = db.query(Incident).filter(Incident.id == incident_id).first()
@@ -76,7 +76,7 @@ def update_incident(
     incident_id: int,
     update: IncidentUpdate,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_role("staff", "organizer")),
 ):
     """Update incident status or assignment."""
     incident = db.query(Incident).filter(Incident.id == incident_id).first()
@@ -87,3 +87,4 @@ def update_incident(
     db.commit()
     db.refresh(incident)
     return incident
+

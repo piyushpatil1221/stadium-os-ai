@@ -157,20 +157,20 @@ export default function TransportPage() {
         {/* Traffic chart + exit guide */}
         <div className="space-y-4">
           <div className="stadium-card p-5">
-            <h3 className="text-sm font-semibold text-white mb-1">Predicted Exit Time (min)</h3>
+            <h3 className="text-sm font-semibold text-text-primary mb-1">Predicted Exit Time (min)</h3>
             <p className="text-xs text-gray-500 mb-4">AI-predicted wait per exit</p>
             <ResponsiveContainer width="100%" height={200}>
               <BarChart data={trafficData} layout="vertical">
                 <XAxis type="number" tick={{ fill: '#6b7280', fontSize: 11 }} axisLine={false} tickLine={false} />
                 <YAxis dataKey="zone" type="category" tick={{ fill: '#6b7280', fontSize: 11 }} axisLine={false} tickLine={false} width={44} />
-                <Tooltip contentStyle={{ background: 'hsl(222,47%,9%)', border: '1px solid hsl(217,32%,18%)', borderRadius: 8, fontSize: 12 }} />
+                <Tooltip contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: 8, fontSize: 12 }} />
                 <Bar dataKey="time" fill="#3b82f6" radius={[0, 4, 4, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
 
           <div className="stadium-card p-5">
-            <h3 className="text-sm font-semibold text-white mb-3">Post-Match Exit Guide</h3>
+            <h3 className="text-sm font-semibold text-text-primary mb-3">Post-Match Exit Guide</h3>
             <div className="space-y-2.5">
               {[
                 { label: 'Fastest Exit', value: 'Metro Line 1 (Gate A)', tag: '3 min', color: 'text-emerald-400' },

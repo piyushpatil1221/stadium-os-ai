@@ -51,7 +51,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[hsl(224,71%,4%)] flex items-center justify-center p-6">
+    <div className="min-h-screen bg-bg-base flex items-center justify-center p-6">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -62,10 +62,10 @@ export default function RegisterPage() {
           <div className="w-8 h-8 rounded-lg bg-blue-500 flex items-center justify-center">
             <Zap size={16} className="text-white" />
           </div>
-          <span className="font-bold text-white">StadiumOS AI</span>
+          <span className="font-bold text-text-primary">StadiumOS AI</span>
         </div>
 
-        <h2 className="text-2xl font-bold text-white mb-1">Create your account</h2>
+        <h2 className="text-2xl font-bold text-text-primary mb-1">Create your account</h2>
         <p className="text-gray-400 text-sm mb-8">Join the FIFA World Cup 2026 operations platform</p>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
@@ -85,7 +85,7 @@ export default function RegisterPage() {
             <input
               {...register('full_name')}
               placeholder="Maria Santos"
-              className="w-full bg-[hsl(222,47%,9%)] border border-[hsl(217,32%,18%)] focus:border-blue-500/60 rounded-xl px-4 py-3 text-sm text-white placeholder:text-gray-600 outline-none transition-colors"
+              className="w-full bg-bg-inset border border-border-subtle focus:border-brand-blue/60 rounded-xl px-4 py-3 text-sm text-text-primary placeholder:text-text-muted outline-none transition-colors"
             />
             {errors.full_name && <p className="mt-1 text-xs text-red-400">{errors.full_name.message}</p>}
           </div>
@@ -96,7 +96,7 @@ export default function RegisterPage() {
               {...register('email')}
               type="email"
               placeholder="you@example.com"
-              className="w-full bg-[hsl(222,47%,9%)] border border-[hsl(217,32%,18%)] focus:border-blue-500/60 rounded-xl px-4 py-3 text-sm text-white placeholder:text-gray-600 outline-none transition-colors"
+              className="w-full bg-bg-inset border border-border-subtle focus:border-brand-blue/60 rounded-xl px-4 py-3 text-sm text-text-primary placeholder:text-text-muted outline-none transition-colors"
             />
             {errors.email && <p className="mt-1 text-xs text-red-400">{errors.email.message}</p>}
           </div>
@@ -108,7 +108,7 @@ export default function RegisterPage() {
                 {...register('password')}
                 type={showPassword ? 'text' : 'password'}
                 placeholder="8+ characters"
-                className="w-full bg-[hsl(222,47%,9%)] border border-[hsl(217,32%,18%)] focus:border-blue-500/60 rounded-xl px-4 py-3 pr-10 text-sm text-white placeholder:text-gray-600 outline-none transition-colors"
+                className="w-full bg-bg-inset border border-border-subtle focus:border-brand-blue/60 rounded-xl px-4 py-3 pr-10 text-sm text-text-primary placeholder:text-text-muted outline-none transition-colors"
               />
               <button
                 type="button"
@@ -130,7 +130,7 @@ export default function RegisterPage() {
                   className={`flex items-start gap-3 p-3 rounded-xl border cursor-pointer transition-all ${
                     selectedRole === role.value
                       ? 'border-blue-500/50 bg-blue-500/10'
-                      : 'border-[hsl(217,32%,18%)] bg-[hsl(222,47%,9%)] hover:border-[hsl(217,32%,28%)]'
+                      : 'border-border-subtle bg-bg-card hover:border-border-strong'
                   }`}
                 >
                   <input type="radio" {...register('role')} value={role.value} className="hidden" />
@@ -140,7 +140,7 @@ export default function RegisterPage() {
                     {selectedRole === role.value && <div className="w-2 h-2 rounded-full bg-blue-500" />}
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-white">{role.label}</p>
+                    <p className="text-sm font-medium text-text-primary">{role.label}</p>
                     <p className="text-xs text-gray-500">{role.desc}</p>
                   </div>
                 </label>

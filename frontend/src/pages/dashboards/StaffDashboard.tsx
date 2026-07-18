@@ -128,14 +128,14 @@ export default function StaffDashboard() {
         <div className="lg:col-span-3 stadium-card p-5">
           <div className="flex items-center gap-2 mb-4">
             <Monitor size={15} className="text-blue-400" />
-            <h3 className="text-sm font-semibold text-white">Entry Gate Monitoring</h3>
+            <h3 className="text-sm font-semibold text-text-primary">Entry Gate Monitoring</h3>
           </div>
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={gateData}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
               <XAxis dataKey="gate" tick={{ fill: '#6b7280', fontSize: 11 }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fill: '#6b7280', fontSize: 11 }} axisLine={false} tickLine={false} />
-              <Tooltip contentStyle={{ background: 'hsl(222,47%,9%)', border: '1px solid hsl(217,32%,18%)', borderRadius: 8, fontSize: 12 }} />
+              <Tooltip contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: 8, fontSize: 12 }} />
               <Bar dataKey="count" name="Current" fill="#3b82f6" radius={[4, 4, 0, 0]} />
               <Bar dataKey="capacity" name="Capacity" fill="rgba(255,255,255,0.05)" radius={[4, 4, 0, 0]} />
             </BarChart>
@@ -167,10 +167,10 @@ export default function StaffDashboard() {
                 <button
                   key={item.label}
                   onClick={item.action}
-                  className="w-full flex items-center gap-3 p-2.5 rounded-xl border border-[hsl(217,32%,18%)] hover:border-[hsl(217,32%,28%)] transition-all text-left"
+                  className="w-full flex items-center gap-3 p-2.5 rounded-xl border border-border-subtle hover:border-border-strong transition-all text-left"
                 >
                   <span className={item.color}>{item.icon}</span>
-                  <span className="text-sm text-gray-200">{item.label}</span>
+                  <span className="text-sm text-text-secondary">{item.label}</span>
                 </button>
               ))}
             </div>
@@ -193,7 +193,7 @@ export default function StaffDashboard() {
                   onChange={e => setAnnouncement(e.target.value)}
                   placeholder="Type announcement text..."
                   rows={3}
-                  className="w-full bg-[hsl(224,71%,4%)] border border-[hsl(217,32%,18%)] rounded-xl px-3 py-2.5 text-sm text-white placeholder:text-gray-600 outline-none resize-none mb-2"
+                  className="w-full bg-bg-inset border border-border-subtle rounded-xl px-3 py-2.5 text-sm text-text-primary placeholder:text-text-muted outline-none resize-none mb-2"
                 />
                 <div className="flex flex-wrap gap-1.5 mb-2">
                   {ANNOUNCEMENT_TEMPLATES.slice(0, 2).map(t => (
