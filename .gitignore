@@ -1,0 +1,28 @@
+# Node / Frontend
+node_modules
+frontend/node_modules
+frontend/dist
+dist
+.npm-cache
+%USERPROFILE%
+frontend/%USERPROFILE%
+
+# Python / Backend
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.venv
+venv
+backend/__pycache__
+backend/.venv
+
+# Environment / OS
+.env
+.env.local
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode
+.idea
